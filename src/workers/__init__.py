@@ -1,4 +1,5 @@
 import os
+import gzip
 import shutil
 import tempfile
 
@@ -15,7 +16,10 @@ app = Celery(__name__, broker=os.environ['REDIS_URL'])
 
 @app.task
 def perform_file_operations(url):
-  download(url)
+  archive = download(url)
+
+  if archive.endswith('.gz'):
+    archive = extract_gzip_file(archive)
 
 def download(url):
   logging.info("Downloading file %s" % url)
@@ -50,5 +54,14 @@ def download_from_ftp(parsed_url, destination):
   with open(destination, 'wb') as f:
     ftp = ftplib.FTP(parsed_url.hostname, username, parsed_url.password)
     ftp.retrbinary("RETR " + parsed_url.path, f.write)
+
+  return destination
+
+def extract_gzip_file(gzip_file_path):
+  destination = tempfile.mktemp(dir='/dev/shm')
+
+  with gzip.open(gzip_file_path, 'r') as gzip_file:
+    with open(destination, 'wb') as text_file:
+      shutil.copyfileobj(gzip_file, text_file)
 
   return destination
