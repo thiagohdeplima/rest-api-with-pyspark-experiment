@@ -43,15 +43,10 @@ O escopo atendido aqui foi:
 
 #### Enviar nova URL para processamento: 
 
-* Verbo: POST 
-* Path: /v1/files
-
 **Requisição:**
 
-```json
-  {
-    "url": "ftp://ita.ee.lbl.gov/traces/NASA_access_log_Jul95.gz"
-  }
+```bash
+curl -X POST -H "Content-Type: application/json" localhost:8000/v1/files --data '{"url": "ftp://ita.ee.lbl.gov/traces/NASA_access_log_Aug95.gz"}'
 ```
 
 **Resposta:**
@@ -67,7 +62,13 @@ O cabeçalho `Content-Type` deverá está presente, e com o valor `application/j
 * Verbo: GET
 * Path: /v1/stats
 
-**Resposta**
+**Requisição:**
+
+```bash
+curl -X GET localhost:8000/v1/stats
+```
+
+**Resposta:**
 
 ```json
   {
