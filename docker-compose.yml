@@ -11,6 +11,7 @@ services:
       context: '.'
     volumes:
     - .:/srv/app
+    - /tmp/data:/srv/data
     environment:
       REDIS_URL: redis://redis:6379/0
       SPARK_URL: spark://spark-master:7077
@@ -26,6 +27,7 @@ services:
       context: '.'
     volumes:
     - .:/srv/app
+    - /tmp/data:/srv/data
     environment:
       REDIS_URL: redis://redis:6379/0
       SPARK_URL: spark://spark-master:7077
@@ -40,6 +42,8 @@ services:
     networks:
     - semantix
     image: bitnami/spark:2
+    volumes: 
+    - /tmp/data:/srv/data
     environment:
       SPARK_MODE: master
       SPARK_RPC_AUTHENTICATION_ENABLED: 'no'
@@ -53,6 +57,8 @@ services:
     networks:
     - semantix
     image: bitnami/spark:2
+    volumes: 
+    - /tmp/data:/srv/data
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://spark-master:7077
@@ -67,6 +73,8 @@ services:
     networks:
     - semantix
     image: bitnami/spark:2
+    volumes: 
+    - /tmp/data:/srv/data
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://spark-master:7077
