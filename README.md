@@ -37,7 +37,7 @@ O escopo atendido aqui foi:
   * Caso sim, finaliza processamento;
   * Caso não, realiza download;
   * Após download, utiliza o Apache Spark para realizar extração dos dados relativos à sessão Extração de dados;
-  * Salvar o resultado no Redis, para consumo na API posteriormente.
+  * Salvar o resultado no Redis, agregando no mesmo resultados de processamentos anteriores, para que haja posterior consulta destas estatísticas via API.
 
 ### Endpoints da API
 
