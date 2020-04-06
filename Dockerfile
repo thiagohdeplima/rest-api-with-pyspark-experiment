@@ -23,6 +23,6 @@ RUN adduser -S -D -H \
   -s /bin/false \
   app
 
-RUN chown -R app:app /srv/app
+RUN chown -R app /srv/app
 
 USER app
