@@ -132,10 +132,17 @@ def get_stats_from_spark(text_file):
 def save_stats_on_redis(url, stats):
   logging.info("Saving results of %s into Redis" % url)
 
+  stored = rconn.get('stats')
+
   with rconn.pipeline() as pipe:
+    if stored is not None:
+      stored = pickle.loads(stored)
+
+      for key, value in stats.items():
+        if isinstance(value, int):
+          stats.update({key: value + stored.get(key)})
+
+    pipe.set("stats", pickle.dumps(stats))
     pipe.set(url, 'DOWNLOADED')
 
-    stats = pickle.dumps(stats)
-
-    pipe.set("stats", stats)
     pipe.execute()
