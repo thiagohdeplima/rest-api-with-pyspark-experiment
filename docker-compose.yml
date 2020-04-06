@@ -11,7 +11,6 @@ services:
       context: '.'
     volumes:
     - .:/srv/app
-    - /tmp/data:/srv/data
     environment:
       REDIS_URL: redis://redis:6379/0
       SPARK_URL: spark://spark-master:7077
@@ -27,7 +26,6 @@ services:
       context: '.'
     volumes:
     - .:/srv/app
-    - /tmp/data:/srv/data
     environment:
       REDIS_URL: redis://redis:6379/0
       SPARK_URL: spark://spark-master:7077
