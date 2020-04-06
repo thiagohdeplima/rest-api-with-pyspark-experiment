@@ -4,6 +4,12 @@ Este repositório tem como objetivo cumprir o teste técnico para a vaga de Enge
 
 Este desafio é dividido em três etapas:
 
+* [Questões](#questões)
+* [Código](#código)
+  * [Endpoints da API](#endpoints-da-api)
+* [Extração de dados](#extração-de-dados)
+
+
 ## Questões
 
 O inicio do documento supramencionado possui algumas questões, que foram respondidas em um documento a parte, [cujo link é este aqui](doc/answers.md).
