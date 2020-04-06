@@ -11,24 +11,33 @@ import urllib
 import ftplib
 import requests
 
+import redis
+import pickle
+
 from celery import Celery
 from pyspark import SparkContext, SparkConf
 
 DATA_DIR = '/srv/data'
 
 sc = SparkContext(conf=SparkConf())
-
 app = Celery(__name__, broker=os.environ['REDIS_URL'])
+rconn = redis.Redis.from_url(os.environ['REDIS_URL'])
 
 @app.task
 def perform_file_operations(url):
+  if rconn.get(url) is not None:
+    logging.info("File of URL %s already download. Finishing it" % (url))
+
+    return
+
   archive = download(url)
 
   if archive.endswith('.gz'):
     archive = extract_gzip_file(archive)
 
-  get_stats_from_spark(archive)
+  stats = get_stats_from_spark(archive)
 
+  save_stats_on_redis(url, stats)
 
 def download(url):
   _, ext = os.path.splitext(url)
@@ -95,8 +104,8 @@ def get_stats_from_spark(text_file):
     .filter(lambda line: status_regex.findall(line) == ['404']) \
     .count()
 
-  top_5_urls = None
-  qty_404_by_day = None
+  top_5_urls = []
+  qty_404_by_day = {}
 
   total_bytes = txt \
     .filter(lambda line: bytes_regex.findall(line) != []) \
@@ -111,3 +120,22 @@ def get_stats_from_spark(text_file):
       total_bytes
     )
   )
+
+  return {
+    'total_bytes': total_bytes,
+    'total_errors': total_errors,
+    'unique_hosts': unique_hosts,
+    'top_5_urls': top_5_urls,
+    'qty_404_by_day': qty_404_by_day
+  }
+  
+def save_stats_on_redis(url, stats):
+  logging.info("Saving results of %s into Redis" % url)
+
+  with rconn.pipeline() as pipe:
+    pipe.set(url, 'DOWNLOADED')
+
+    stats = pickle.dumps(stats)
+
+    pipe.set("stats", stats)
+    pipe.execute()
