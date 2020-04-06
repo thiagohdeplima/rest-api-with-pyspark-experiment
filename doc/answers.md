@@ -8,7 +8,7 @@ O `cache` permitirá que você armazene resultados intermediários destes proces
 
 > O mesmo código implementado em Spark é normalmente mais rápido que a implementação equivalente em _MapReduce_. Por quê?
 
-Enquanto que o MapReduce do Hadoop utiliza o disco para realizar operações de forma distribuída no HDFS, o Apacke Spark utiliza a memória RAM, tornando-o assim mais rápido que o Hadoop/MapReduce.
+Enquanto que o MapReduce do Hadoop utiliza o disco para realizar operações de forma distribuída no HDFS, o Apache Spark utiliza a memória RAM, tornando-o assim mais rápido que o Hadoop/MapReduce.
 
 > Qual é a função do `SparkContext​`?
 
