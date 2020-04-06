@@ -17,3 +17,12 @@ RUN pip install -r requirements.txt
 
 RUN chmod +x \
   /usr/local/lib/python3.7/site-packages/pyspark/bin/*
+
+RUN adduser -S -D -H \
+  -h /srv/app \
+  -s /bin/false \
+  app
+
+RUN chown -R app:app /srv/app
+
+USER app
