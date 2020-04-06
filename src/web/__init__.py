@@ -14,9 +14,9 @@ def get_v1_stats():
   stats = rconn.get('stats')
 
   if stats is None:
-    return 404, jsonify({
+    return jsonify({
       'error': 'not_found'
-    })
+    }), 404
 
   return jsonify(pickle.loads(stats))
 
